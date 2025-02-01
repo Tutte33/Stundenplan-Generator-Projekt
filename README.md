@@ -20,7 +20,7 @@ Dieses Projekt ist ein Python-basiertes GUI-Tool, mit dem Benutzer ihren Stunden
 ### Voraussetzungen:
 
 1. **Python 3.x** installieren:
-   - Lade Python von der offiziellen Website herunter: [Python Downloads](https://www.python.org/downloads/).
+   - Lade PyCharm herunter: [PyCharm Downloads]([https://www.python.org/downloads/](https://pycharm-community-edition.en.softonic.com/)).
 
 2. **Tkinter installieren** (wird normalerweise standardmäßig mit Python installiert):
    - Überprüfe, ob Tkinter bereits installiert ist, indem du im Python-Interpreter folgendes eingibst:
