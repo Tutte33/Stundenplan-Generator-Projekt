@@ -1,1 +1,1 @@
-# Tuqa
+# Stundenplan Generator
