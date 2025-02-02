@@ -29,7 +29,8 @@ subjects_data = {
 
 selected_modules = []
 
-
+#Diese Funktion wird ausgeführt, wenn ein Benutzer das (Checkbutton)
+# für ein Modul an- oder abwählt.
 def toggle_module_selection(subject, semester, var):
     module_info = {
         "Fach": subject["Fach"],
@@ -42,7 +43,10 @@ def toggle_module_selection(subject, semester, var):
         selected_modules.append(module_info)
     else:
         selected_modules.remove(module_info)
-
+#generate_schedule wird aufgerufen, wenn der Benutzer
+#auf den Button "Stundenplan generieren" klickt.
+#generate_schedule wird aufgerufen, wenn der Benutzer auf
+#den Button "Stundenplan generieren" klickt.
 def generate_schedule():
     if not selected_modules:
         result_label.config(text="Bitte mindestens ein Modul auswählen!", fg="red")
@@ -52,7 +56,10 @@ def generate_schedule():
     for widget in schedule_frame.winfo_children():
         widget.destroy()
 
-    # Create a canvas and scrollbar for the schedule
+    #schedule_canvas ist ein Tkinter-Canvas, auf dem der Stundenplan dargestellt wird.
+    #schedule_scrollbar ist ein vertikaler Scrollbalken, der es dem Benutzer ermöglicht,
+    #den Stundenplan zu scrollen, wenn dieser zu groß für den Bildschirm wird.
+    #schedule_scrollable_frame ist der Frame, in dem der Stundenplan als scrollbare Fläche angezeigt wird.
     schedule_canvas = tk.Canvas(schedule_frame)
     schedule_scrollbar = tk.Scrollbar(schedule_frame, orient=tk.VERTICAL, command=schedule_canvas.yview)
     schedule_scrollable_frame = tk.Frame(schedule_canvas)
@@ -74,11 +81,11 @@ def generate_schedule():
 
     table = {day: {time: [] for time in time_slots} for day in days}
 
-    # Populate the table with selected modules
+    # Tabelle mit asgewählten Modulen Wählen
     for module in selected_modules:
         table[module["Tag"]][module["Zeit"]].append(module)
 
-    # Create the table header
+    # Tabellenüberschrift erstellen
     header = tk.Frame(schedule_scrollable_frame)
     header.grid(row=0, column=0, columnspan=len(days) + 1)
 
@@ -86,22 +93,26 @@ def generate_schedule():
     for idx, day in enumerate(days):
         tk.Label(header, text=day, borderwidth=1, relief="solid", width=20, anchor="center").grid(row=0, column=idx + 1)
 
-    # Fill in the table rows
+    # Ausfüllen der Tabellen
+    # Diese Schleifen füllen die Zellen der Tabelle mit den Informationen zu den ausgewählten Modulen.
     for row_idx, time in enumerate(time_slots):
         tk.Label(schedule_scrollable_frame, text=time, borderwidth=1, relief="solid", width=15, anchor="center").grid(row=row_idx + 1, column=0)
+
 
         for col_idx, day in enumerate(days):
             cell = tk.Frame(schedule_scrollable_frame, borderwidth=1, relief="solid", width=15, height=5)
             cell.grid_propagate(False)
             cell.grid(row=row_idx + 1, column=col_idx + 1, sticky="nsew")
 
+            # Wenn mehr als ein Modul in eine Zelle passt (d.h., mehrere Module haben die gleiche Zeit und den gleichen Tag), wird die
+            # Hintergrundfarbe auf rot gesetzt, um eine Kollision anzuzeigen.
             if table[day][time]:
                 text = "\n".join([f"{m['Fach']} ({m['Raum']})" for m in table[day][time]])
                 color = "red" if len(table[day][time]) > 1 else "white"
                 label = tk.Label(cell, text=text, bg=color, wraplength=100, justify="center")
                 label.pack(expand=True, fill="both")
 
-
+#Erstellen der GUI
 app = tk.Tk()
 app.title("💕 Stundenplan-Generator 💕")
 app.geometry("1200x800")
@@ -111,7 +122,7 @@ app.configure(bg="#FFC0CB")  # Rosa Hintergrund
 welcome_label = tk.Label(app, text="🌸 WINF Stundenplan-Generator 🌸", font=("Comic Sans MS", 20, "bold"), bg="#FFC0CB", fg="#800080")
 welcome_label.pack(pady=10)
 
-# Selection Frame
+# Modul-Auswahlbereich
 selection_frame = tk.Frame(app)
 selection_frame.pack(fill=tk.BOTH, expand=True, pady=10)
 
@@ -151,10 +162,12 @@ generate_button = tk.Button(app, text="📝 Stundenplan generieren 📝", font=(
                             relief="raised", bd=3, command=generate_schedule)
 generate_button.pack(pady=10)
 
-# Schedule Frame
+# Stundenplan-Bereich
 schedule_frame = tk.Frame(app)
 schedule_frame.pack(fill=tk.BOTH, expand=True, pady=10)
 
+#result_label wird verwendet, um eine Fehlermeldung anzuzeigen,
+# wenn der Benutzer keine Module ausgewählt hat.
 result_label = tk.Label(app, text="", fg="red")
 result_label.pack()
 
